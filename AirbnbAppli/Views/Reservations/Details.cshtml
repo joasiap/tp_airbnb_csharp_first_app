@@ -13,29 +13,29 @@
                 <div class="text-success">@TempData["messageSucces"]</div>
             </div>
             <div class="row mb-3">
-                <div class="col-lg-3">Nombre de personnes:</div>
-                <div class="col-lg-8">@Html.DisplayFor(modelItem => reservation.Logement.NbPersonnes)</div>
+                <div class="col-lg-3">Capacité :</div>
+                <div class="col-lg-8">@Html.DisplayFor(modelItem => reservation.Logement.NbPersonnes) personne(s)</div>
             </div>
             <div class="row mb-3">
-                <div class="col-lg-3">Ville:</div>
+                <div class="col-lg-3">Ville :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => reservation.Logement.Adresse.Ville)</div>
             </div>
             <div class="row mb-3">
-                <div class="col-lg-3">Département:</div>
+                <div class="col-lg-3">Département :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => reservation.Logement.Adresse.Departement.Nom)</div>
             </div>
             <div class="row mb-3">
-                <div class="col-lg-3">Description:</div>
+                <div class="col-lg-3">Description :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => reservation.Logement.Description)</div>
             </div>
 
             <div class="row mb-3">
-                <div class="col-lg-3">Date début:</div>
+                <div class="col-lg-3">Date début :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => reservation.DateDebut)</div>
             </div>
 
             <div class="row mb-3">
-                <div class="col-lg-3">Date fin:</div>
+                <div class="col-lg-3">Date fin :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => reservation.DateFin)</div>
             </div>
 

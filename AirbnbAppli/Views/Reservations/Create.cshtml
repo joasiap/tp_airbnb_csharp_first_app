@@ -15,19 +15,19 @@
         <div class="card-body">
             <h5 class="card-title text-center mb-5">@Html.DisplayFor(modelItem => logement.Titre)</h5>
             <div class="row mb-3">
-                <div class="col-lg-3">Nombre de personnes:</div>
-                <div class="col-lg-8">@Html.DisplayFor(modelItem => logement.NbPersonnes)</div>
+                <div class="col-lg-3">Capacité :</div>
+                <div class="col-lg-8">@Html.DisplayFor(modelItem => logement.NbPersonnes) personne(s)</div>
             </div>
             <div class="row mb-3">
-                <div class="col-lg-3">Ville:</div>
+                <div class="col-lg-3">Ville :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => logement.Adresse.Ville)</div>
             </div>
             <div class="row mb-3">
-                <div class="col-lg-3">Département:</div>
+                <div class="col-lg-3">Département :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => logement.Adresse.Departement.Nom)</div>
             </div>
             <div class="row mb-3">
-                <div class="col-lg-3">Description:</div>
+                <div class="col-lg-3">Description :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => logement.Description)</div>
             </div>
 
