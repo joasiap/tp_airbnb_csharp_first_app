@@ -32,7 +32,7 @@ namespace AirbnbAppli.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             // date de début avant aujourd'hui
-            if (DateDebut < DateTime.Now)
+            if (DateDebut < DateTime.Today)
             {
                 yield return new ValidationResult(
                                    "La date de début est déjà passée.",

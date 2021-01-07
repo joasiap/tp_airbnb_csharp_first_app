@@ -87,6 +87,15 @@ namespace AirbnbAppli.Controllers
                     Locateur = utilisateur
                 };
 
+                Disponibilite periodeReservation = new Disponibilite
+                {
+                    DateDebut = reservationVM.DateDebut,
+                    DateFin = reservationVM.DateFin,
+                    Logement = logement,
+                    Disponible = true
+                };
+
+                _db.Disponibilites.Add(periodeReservation);
                 _db.Reservations.Add(reservation);
                 _db.SaveChanges();
 

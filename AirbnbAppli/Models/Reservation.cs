@@ -12,10 +12,10 @@ namespace AirbnbAppli.Models
 
         public virtual Utilisateur Locateur { get; set; }
 
-       // [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DateDebut { get; set; }
 
-       // [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DateFin { get; set; }
 
         public string Commentaire { get; set; }
