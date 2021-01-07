@@ -33,10 +33,31 @@ namespace AirbnbAppli.Controllers
                 DateDebut = DateTime.Now,
                 DateFin = DateTime.Now.AddDays(7)
             };
-          
+
+            List<Reservation> reservations = getAllReservationsByLogement(logement.Id);
+            // List<Disponibilite> disponibilites = getDisponibilitesByLogement();
+
+            ViewData["reservations"] = Newtonsoft.Json.JsonConvert.SerializeObject(reservations);
             ViewData["logement"] = logement;
             return View(reservationVM);
         }
+
+        public List<Reservation> getAllReservationsByLogement(int idLogement)
+        {
+            return _db.Reservations
+                .Where(reservation => reservation.Logement.Id == idLogement)
+                .ToList();
+        }
+
+
+        /**
+         * Permet de récupérer la liste des périodes
+         * de ré
+        
+        public List<Disponibilite> getDisponibilitesByLogement()
+        {
+            return null;
+        } */
 
         // POST: ReservationsController/Create
         [HttpPost]
@@ -86,7 +107,7 @@ namespace AirbnbAppli.Controllers
                     DateFin = reservationVM.DateFin,
                     Locateur = utilisateur
                 };
-
+                /*
                 Disponibilite periodeReservation = new Disponibilite
                 {
                     DateDebut = reservationVM.DateDebut,
@@ -95,7 +116,7 @@ namespace AirbnbAppli.Controllers
                     Disponible = true
                 };
 
-                _db.Disponibilites.Add(periodeReservation);
+                _db.Disponibilites.Add(periodeReservation);*/
                 _db.Reservations.Add(reservation);
                 _db.SaveChanges();
 

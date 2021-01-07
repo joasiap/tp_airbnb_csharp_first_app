@@ -3,17 +3,23 @@
 
 @{
     var logement = ViewData["logement"] as Logement;
+    var reservations = ViewData["reservations"] as Reservation;
     var isUtilisateurAuthentifieStr = HttpContextAccessor.HttpContext.Request.Cookies["userAuthentifie"];
     var isUtilisateurAuthentifie = Convert.ToBoolean(isUtilisateurAuthentifieStr);
     var idUtilisateurAuthentifie = Convert.ToInt32(HttpContextAccessor.HttpContext.Request.Cookies["userId"]);
 }
-
+@Html.Hidden("reservations", reservations);
 <div class="container-fluid">
     <h1 class="mt-5 mb-5">Détails d'un logement</h1>
 
     <div class="card mx-auto p-3">
         <div class="card-body">
             <h5 class="card-title text-center mb-5">@Html.DisplayFor(modelItem => logement.Titre)</h5>
+
+            <div class="row p-3">
+                <div class="text-success">@TempData["messageSucces"]</div>
+            </div>
+
             <div class="row mb-3">
                 <div class="col-lg-3">Capacité :</div>
                 <div class="col-lg-8">@Html.DisplayFor(modelItem => logement.NbPersonnes) personne(s)</div>
@@ -38,7 +44,7 @@
                         Réservez pour :
                     </div>
                 </div>
-                
+
                 @using (Html.BeginForm())
                 {
                     @Html.AntiForgeryToken()
@@ -54,7 +60,7 @@
                         </div>
                         <div class="offset-lg-3 col-lg-8">
                             <div>@Html.ValidationMessageFor(model => model.DateDebut, "", new { @class = "text-danger" })</div>
-                                
+
                         </div>
                     </div>
 
@@ -76,12 +82,19 @@
                         <input type="submit" value="Réserver" class="btn btn-primary" />
                     </div>
                 }
-                
+
             }
 
-            <div class="row p-3">
-                <div class="text-success">@TempData["messageSucces"]</div>
+        <div class="row mt-5">
+            <div class="font-weight-bold col-lg-12">
+                Calendrier de réservations :
             </div>
+            <div class="text-danger col-lg-12">
+                * périodes d'indisponibilité marquées en rouge
+            </div>
+        </div>
+
+            <div id="calendar" class="m-2 p-5"></div>
 
             <div class="text-center mt-5">
                 @Html.ActionLink("Retour", "Index", "Home", null, new { @class = "btn btn-secondary" })
@@ -90,4 +103,25 @@
     </div>
 
 </div>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 
+<script src="~/lib/availability-calendar.js"></script>
+<script>
+   // $(document).ready(function () {
+        var tabReservations = new Array();
+        let reservations = $('#reservations').val();
+        
+        let reservationsjsonArray = JSON.parse(reservations);
+      
+        $.each(reservationsjsonArray, function (i, val) {
+            let dateDebut = val.DateDebut;
+            let dateFin = val.DateFin;
+            console.log(typeof val.DateDebut);
+            tabReservations.push({ start: dateDebut.substr(0, dateDebut.indexOf('T')), end: dateFin.substr(0, dateFin.indexOf('T')) });
+        })
+        var unavailableDates = tabReservations;
+    
+        $('#calendar').availabilityCalendar(unavailableDates);
+
+ //   });
+</script>
