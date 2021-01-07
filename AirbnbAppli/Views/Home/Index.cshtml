@@ -1,0 +1,165 @@
+﻿@model SearchFormViewModel
+@{
+    var logements = ViewData["logements"] as List<Logement>;
+    var mesLogements = ViewData["mesLogements"] as List<Logement>;
+    var mesReservations = ViewData["mesReservations"] as List<Reservation>; 
+    var departements = ViewData["departements"] as List<Departement>;
+}
+<div class="container-fluid">
+    <div class="text-danger">@TempData["messageErreur"]</div>
+    <div class="text-success">@TempData["messageSucces"]</div>
+
+    <!-- CHAMP DE RECHERCHE -->
+    <h4 class="display-5 mt-5 mb-5">Recherche d'un logement</h4>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="row form-group">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NbPersonnes, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-lg-8">
+                @Html.EditorFor(model => model.NbPersonnes)
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.Ville, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-lg-8">
+                @Html.EditorFor(model => model.Ville)
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.Departement, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-lg-8">
+                @Html.DropDownListFor(model => model.Departement, departements.Select(d => new SelectListItem { Text = d.Nom, Value = d.Id.ToString() }), "Choisir")
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <input type="submit" value="Rechercher" class="btn btn-primary" />
+        </div>
+    }
+
+
+    <!-- LISTE DE LOGEMENTS -->
+    <h4 class="display-5 mt-5 mb-5">Liste de logements à réserver</h4>
+
+    @if (logements != null && logements.Count > 0)
+    {
+
+        <div class="row">
+            @foreach (var logement in logements)
+            {
+
+                <div class="card col-md-3 m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3 text-center">@Html.DisplayFor(modelItem => logement.Titre)</h5>
+                        <div>
+                            <div class="row">Capacité: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => logement.NbPersonnes) personne(s)</div>
+                        </div>
+                        <div>
+                            <div class="row">Ville: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => logement.Adresse.Ville)</div>
+                        </div>
+                        <div>
+                            <div class="row">Département: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => logement.Adresse.Departement.Nom)</div>
+                        </div>
+                        <div class="text-right mt-4">
+                            @Html.ActionLink("Voir", "Create", "Reservations", new { id = logement.Id }, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+    }
+    else
+    {
+        <div>
+            <p class="text-danger">Aucun logement n'est disponible.</p>
+        </div>
+    }
+
+    <!-- LISTE DE MES LOGEMENTS -->
+    @if (mesLogements != null && mesLogements.Count > 0)
+    {
+        <div class="row">
+            <h4 class="display-5 mt-5 mb-5">Liste vos logements</h4>
+        </div>
+
+        <div class="row">
+            @foreach (var logement in mesLogements)
+            {
+
+                <div class="card col-md-3 m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3 text-center">@Html.DisplayFor(modelItem => logement.Titre)</h5>
+                        <div>
+                            <div class="row">Capacité: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => logement.NbPersonnes) personne(s)</div>
+                        </div>
+                        <div>
+                            <div class="row">Ville: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => logement.Adresse.Ville)</div>
+                        </div>
+                        <div>
+                            <div class="row">Département: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => logement.Adresse.Departement.Nom)</div>
+                        </div>
+                        <div class="text-right mt-4">
+                            @Html.ActionLink("Voir", "Create", "Reservations", new { id = logement.Id }, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+    }
+
+    <!-- LISTE DE MES RESERVATIONS -->
+    @if (mesReservations != null && mesReservations.Count > 0)
+    {
+        <div class="row">
+            <h4 class="display-5 mt-5 mb-5">Liste vos logements</h4>
+        </div>
+
+        <div class="row">
+            @foreach (var reservation in mesReservations)
+            {
+
+                <div class="card col-md-3 m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3 text-center">@Html.DisplayFor(modelItem => reservation.Logement.Titre)</h5>
+                        <div>
+                            <div class="row">Capacité: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => reservation.Logement.NbPersonnes) personne(s)</div>
+                        </div>
+                        <div>
+                            <div class="row">Ville: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => reservation.Logement.Adresse.Ville)</div>
+                        </div>
+                        <div>
+                            <div class="row">Département: </div>
+                            <div class="font-weight-bold">@Html.DisplayFor(modelItem => reservation.Logement.Adresse.Departement.Nom)</div>
+                        </div>
+                        <div class="text-right mt-4">
+                            @Html.ActionLink("Voir", "Details", "Reservations", new { id = reservation.Id }, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+    }
+</div>

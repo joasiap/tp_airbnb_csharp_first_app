@@ -1,0 +1,82 @@
+﻿@model UtilisateurViewModel
+<h1 class="mt-5 mb-5">Créer un compte</h1>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+
+    @if (ViewBag.Message != null)
+    {
+        <div style="border:solid 1px green">
+            @ViewBag.Message
+        </div>
+    }
+
+<div class="row form-group">  
+    <div class="col-lg-3">
+        @Html.LabelFor(model => model.Prenom, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-lg-8">
+        @Html.EditorFor(model => model.Prenom)
+        @Html.ValidationMessageFor(model => model.Prenom, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="row form-group">
+    <div class="col-lg-3">
+        @Html.LabelFor(model => model.Nom, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-lg-8">
+        @Html.EditorFor(model => model.Nom)
+        @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="row form-group">
+    <div class="col-lg-3">
+        @Html.LabelFor(model => model.Telephone, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-lg-8">
+        @Html.EditorFor(model => model.Telephone)
+        @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="row form-group">
+    <div class="col-lg-3">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-lg-8">
+        @Html.EditorFor(model => model.Email)
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="row form-group">
+    <div class="col-lg-3">
+        @Html.LabelFor(model => model.MotDePasse, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-lg-8">
+        @Html.EditorFor(model => model.MotDePasse)
+        @Html.ValidationMessageFor(model => model.MotDePasse, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="row form-group">
+    <div class="col-lg-3">
+        @Html.LabelFor(model => model.ConfirmationMotDePasse, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-lg-8">
+        @Html.EditorFor(model => model.ConfirmationMotDePasse)
+        @Html.ValidationMessageFor(model => model.ConfirmationMotDePasse, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+
+<div class="row form-group mt-5">
+    <input type="submit" value="Créer" class="btn btn-primary" />
+</div>
+
+}

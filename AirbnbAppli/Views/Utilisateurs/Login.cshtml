@@ -1,0 +1,31 @@
+﻿@model LoginViewModel 
+
+<h2 class="mt-5 mb-5">Login</h2>
+<div>
+    @using (Html.BeginForm())
+    {
+        <div class="text-danger">@Html.ValidationSummary(true)</div>
+
+        <div class="row form-group">
+            <div class="col-lg-2">@Html.LabelFor(model => model.Email)</div>
+            <div class="col-lg-8">
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-lg-2">
+                @Html.LabelFor(model => model.MotDePasse)
+            </div>
+            <div class="col-lg-8">
+                @Html.EditorFor(model => model.MotDePasse)
+                @Html.ValidationMessageFor(model => model.MotDePasse, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <input type="submit" value="S'inscrire" class="btn btn-primary" />
+        </div>
+    }
+
+</div>
