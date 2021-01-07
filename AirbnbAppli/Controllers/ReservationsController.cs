@@ -90,7 +90,7 @@ namespace AirbnbAppli.Controllers
                 _db.Reservations.Add(reservation);
                 _db.SaveChanges();
 
-                TempData["messageSucces"] = "Réservation effectuée avec succès";
+                TempData["messageSucces"] = "Réservation effectuée avec succès !";
                 return RedirectToAction("Details", new { id = reservation.Id });
             }
             catch
