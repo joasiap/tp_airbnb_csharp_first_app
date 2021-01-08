@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using AirbnbAppli.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace AirbnbAppli.Controllers
 {
@@ -71,15 +74,18 @@ namespace AirbnbAppli.Controllers
         // POST: ReservationsController/Create
         [HttpPost]
        // [ValidateAntiForgeryToken]
-        public ActionResult Create(string idProprietaire, string idUtilisateur, string contenu)
+        public ActionResult Create()
         {
             try
             {
-                int idProprietaire1 = Convert.ToInt32(idProprietaire);
-                int idUtilisateur1 = Convert.ToInt32(idUtilisateur);
+                string content = (new StreamReader(Request.Body, Encoding.UTF8)).ReadToEndAsync().Result;
+                JObject jsonContent = JObject.Parse(content);
+                int idProprietaire = Convert.ToInt32(jsonContent["idProprietaire"]);
+                int idUtilisateur = Convert.ToInt32(jsonContent["idUtilisateur"]);
+                string contenu = jsonContent["contenu"].ToString();
 
-                Utilisateur proprietaire = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idProprietaire1);
-                Utilisateur utilisateurAuthentifie = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idUtilisateur1);
+                Utilisateur proprietaire = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idProprietaire);
+                Utilisateur utilisateurAuthentifie = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idUtilisateur);
 
                 Message message = new Message
                 {
