@@ -10,7 +10,7 @@
     <div class="text-success">@TempData["messageSucces"]</div>
 
     <!-- CHAMP DE RECHERCHE -->
-    <h4 class="display-5 mt-5 mb-5">Recherche d'un logement</h4>
+    <h4 class="display-5 mt-5 mb-5">Recherche d'un logement à réserver</h4>
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -130,7 +130,7 @@
     @if (mesReservations != null && mesReservations.Count > 0)
     {
         <div class="row">
-            <h4 class="display-5 mt-5 mb-5">Liste vos logements</h4>
+            <h4 class="display-5 mt-5 mb-5">Liste de vos réservations</h4>
         </div>
 
         <div class="row">

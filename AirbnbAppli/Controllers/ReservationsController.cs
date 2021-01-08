@@ -35,29 +35,21 @@ namespace AirbnbAppli.Controllers
             };
 
             List<Reservation> reservations = getAllReservationsByLogement(logement.Id);
-            // List<Disponibilite> disponibilites = getDisponibilitesByLogement();
 
             ViewData["reservations"] = Newtonsoft.Json.JsonConvert.SerializeObject(reservations);
             ViewData["logement"] = logement;
             return View(reservationVM);
         }
 
+        /**
+         * Récupère la liste de réservations pour un logement
+         */ 
         public List<Reservation> getAllReservationsByLogement(int idLogement)
         {
             return _db.Reservations
                 .Where(reservation => reservation.Logement.Id == idLogement)
                 .ToList();
         }
-
-
-        /**
-         * Permet de récupérer la liste des périodes
-         * de ré
-        
-        public List<Disponibilite> getDisponibilitesByLogement()
-        {
-            return null;
-        } */
 
         // POST: ReservationsController/Create
         [HttpPost]
@@ -66,9 +58,9 @@ namespace AirbnbAppli.Controllers
         {
             // récupère l'utilisateur authentifié
             Utilisateur utilisateur = null;
-            if (HttpContext.Request.Cookies.ContainsKey("userId"))
+            if (HttpContext.Session.GetInt32("userId") != null && HttpContext.Session.GetInt32("userId") > 0)
             {
-                int idUtilisateur = Convert.ToInt32(HttpContext.Request.Cookies["userId"]);
+                int idUtilisateur = (int) HttpContext.Session.GetInt32("userId"); //Convert.ToInt32(HttpContext.Request.Cookies["userId"]);
                 utilisateur = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idUtilisateur);
             }
 
@@ -79,9 +71,22 @@ namespace AirbnbAppli.Controllers
             }
 
             Logement logement = getLogement(reservationVM.IdLogement);
+            List<Reservation> reservations = getAllReservationsByLogement(logement.Id);
+
+            ViewData["reservations"] = Newtonsoft.Json.JsonConvert.SerializeObject(reservations);
             ViewData["logement"] = logement;
 
-            if (!ModelState.IsValid)
+            foreach (Reservation reservation in reservations)
+            {
+                bool overlap = isPeriodeDisponible(reservation.DateDebut, reservation.DateFin, reservationVM.DateDebut, reservationVM.DateFin);
+                if (overlap)
+                {
+                    ModelState.AddModelError("", "La réservation n'est pas disponible pour la période choisie!");
+                    return View(reservationVM);
+                }
+            }
+
+                if (!ModelState.IsValid)
             {
                 return View(reservationVM);
             }
@@ -107,16 +112,7 @@ namespace AirbnbAppli.Controllers
                     DateFin = reservationVM.DateFin,
                     Locateur = utilisateur
                 };
-                /*
-                Disponibilite periodeReservation = new Disponibilite
-                {
-                    DateDebut = reservationVM.DateDebut,
-                    DateFin = reservationVM.DateFin,
-                    Logement = logement,
-                    Disponible = true
-                };
-
-                _db.Disponibilites.Add(periodeReservation);*/
+             
                 _db.Reservations.Add(reservation);
                 _db.SaveChanges();
 
@@ -128,6 +124,47 @@ namespace AirbnbAppli.Controllers
                 return View(reservationVM);
             }
  
+        }
+
+        /**
+         *  Permet de vérifier si le logement est disponible 
+         *  dans la période choisie lors de la réservation
+         */ 
+        public bool isPeriodeDisponible(DateTime dateDebut1, DateTime dateFin1, DateTime dateDebut2, DateTime dateFin2)
+        {
+            /*
+            return (
+                (dateDebut2 >= dateDebut1 && dateDebut2 < dateFin1) || (dateFin2 <= dateFin1 && TE > dateDebut1) || (dateDebut2 <= dateDebut1 && dateFin2 >= dateFin1)
+            );
+            */
+
+            return (
+                // 1. Case:
+                //
+                //       dateDebut2-------dateFin2
+                //    dateDebut1------dateFin1 
+                //
+                // dateDebut2 is after dateDebut1 but before dateFin1
+                (dateDebut2 >= dateDebut1 && dateDebut2 < dateFin1)
+                || // or
+
+                // 2. Case
+                //
+                //    dateDebut2-------dateFin2
+                //        dateDebut1---------dateFin1
+                //
+                // dateFin2 is before dateFin1 but after dateDebut1
+                (dateFin2 <= dateFin1 && dateFin2 > dateDebut1)
+                || // or
+
+                // 3. Case
+                //
+                //  dateDebut2----------dateFin2
+                //     dateDebut1----dateFin1
+                //
+                // dateDebut2 is before dateDebut1 and dateFin2 is after dateFin1
+                (dateDebut2 <= dateDebut1 && dateFin2 >= dateFin1)
+            );
         }
 
         /**
@@ -151,7 +188,7 @@ namespace AirbnbAppli.Controllers
         /**
          * Permet de récupérer un logement de la BDD 
          */
-        public Logement getLogement(int id)
+        private Logement getLogement(int id)
         {
             return _db.Logements
              .Where(logement => logement.Id == id)

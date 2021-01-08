@@ -1,0 +1,134 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Http
+@{
+    var idProprietaire = ViewData["idProprietaire"];
+    var idUtilisateurAuthentifie = Convert.ToInt32(HttpContextAccessor.HttpContext.Session.GetInt32("userId"));
+}
+
+@Html.Hidden("utilisateur", idUtilisateurAuthentifie)
+@Html.Hidden("idProprietaire", idProprietaire)
+<div class="container-fluid">
+    <div class="chat_window">
+        <div class="top_menu">
+            <div class="title">Chat</div>
+        </div>
+        <ul class="messages"></ul>
+        <div class="bottom_wrapper clearfix">
+            <div class="message_input_wrapper">
+                <input class="message_input" placeholder="Votre message..." />
+            </div>
+            <div class="send_message">
+                <div class="icon"></div>
+                <div class="text">Envoyer</div>
+            </div>
+        </div>
+    </div>
+    <div class="message_template">
+        <li class="message">
+            <div class="avatar"></div>
+            <div class="text_wrapper">
+                <div class="text"></div>
+            </div>
+        </li>
+    </div>
+</div>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+    (function () {
+
+        let utilisateurAuthentifie = $('#utilisateur').val();
+        let idProprietaire = $('#idProprietaire').val();
+
+        var Message;
+        Message = function (arg) {
+            this.text = arg.text, this.message_side = arg.message_side;
+            this.draw = function (_this) {
+                return function () {
+                    var $message;
+                    $message = $($('.message_template').clone().html());
+                    $message.addClass(_this.message_side).find('.text').html(_this.text);
+                    $('.messages').append($message);
+                    return setTimeout(function () {
+                        return $message.addClass('appeared');
+                    }, 0);
+                };
+            }(this);
+            return this;
+        };
+        $(function () {
+            var getMessageText, message_side, sendMessage;
+            message_side = 'right';
+            getMessageText = function () {
+                var $message_input;
+                $message_input = $('.message_input');
+                return $message_input.val();
+            };
+
+
+            sendMessage = function (text, message_side) {
+                var $messages, message;
+                if (text.trim() === '') {
+                    return;
+                }
+                $('.message_input').val('');
+                $messages = $('.messages');
+                message = new Message({
+                    text: text,
+                    message_side: message_side
+                });
+                message.draw();
+                message_side = '';
+                return $messages.animate({ scrollTop: $messages.prop('scrollHeight') }, 300);
+            };
+            $('.send_message').click(function (e) {
+                return sendMessage(getMessageText(), message_side);
+            });
+            $('.message_input').keyup(function (e) {
+                if (e.which === 13) {
+                    return sendMessage(getMessageText(), message_side);
+                }
+            });
+
+
+            // AJAx -> récupérer les messages
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetMessages", "Messages")',
+                data: "idProprietaire=" + idProprietaire + "&idUtilisateur=" + utilisateurAuthentifie,
+                processData: false,
+
+                success: function (response, status, xhr) {
+                    // la réponse est un STRING avec des données JSON donc il faut la parser pour obtenir un objet JSON en JS
+                    let messagesjsonArray = JSON.parse(response); 
+
+                    $.each(messagesjsonArray, function (i, val) {
+                        console.log(utilisateurAuthentifie + ' ' + val.Emetteur.Id)
+
+                        // messages utilisateur connecté à droite
+                        if (utilisateurAuthentifie == val.Emetteur.Id) {
+                            message_side = 'right';
+                        }
+                        else {
+                            message_side = 'left';
+                        }
+
+                        sendMessage(val.Contenu, message_side);
+
+                    });
+
+                },
+            });
+            // fin appel AJAX 1
+        });
+          
+            /*
+            sendMessage(message, side);
+            setTimeout(function () {
+                return sendMessage(message, side);
+            }, 1000);
+            return setTimeout(function () {
+                 return sendMessage(message, side);
+            }, 2000);*/
+
+    }.call(this));
+</script>

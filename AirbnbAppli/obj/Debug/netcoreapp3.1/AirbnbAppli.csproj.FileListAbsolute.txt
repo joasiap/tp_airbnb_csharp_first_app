@@ -133,9 +133,7 @@ C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\De
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\AirbnbAppli.TagHelpers.output.cache
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\AirbnbAppli.RazorCoreGenerate.cache
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
-C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Logements\Create.cshtml.g.cs
-C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Logements\Details.cshtml.g.cs
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
@@ -157,3 +155,4 @@ C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\bin\De
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Utilisateurs\Login.cshtml.g.cs
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Reservations\Create.cshtml.g.cs
 C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Reservations\Details.cshtml.g.cs
+C:\Users\pietr\OneDrive\Bureau\ENI CDA\coursC#ASP\AirbnbAppli\AirbnbAppli\obj\Debug\netcoreapp3.1\Razor\Views\Messages\Index.cshtml.g.cs

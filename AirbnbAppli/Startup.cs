@@ -28,6 +28,15 @@ namespace AirbnbAppli
             services.AddControllersWithViews();
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("mydb")));
             services.AddHttpContextAccessor();
+
+            // configuration de la session
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +59,9 @@ namespace AirbnbAppli
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // IMPORTANT: UseSession après UseRouting et avant UseEndpoints
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

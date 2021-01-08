@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace AirbnbAppli.Controllers
 {
@@ -25,15 +26,15 @@ namespace AirbnbAppli.Controllers
 
         public async Task<IActionResult> IndexAsync(SearchFormViewModel searchFormVM = null)
         {
-            // récupère l'utilisateur authentifié
+            // récupération de l'utilisateur connecté
             Utilisateur utilisateur = null;
-            if (HttpContext.Request.Cookies.ContainsKey("userId"))
+            if (HttpContext.Session.GetInt32("userId") != null && HttpContext.Session.GetInt32("userId") > 0)//HttpContext.Request.Cookies.ContainsKey("userId")
             {
-                int idUtilisateur = Convert.ToInt32(HttpContext.Request.Cookies["userId"]);
+                int idUtilisateur = (int)HttpContext.Session.GetInt32("userId"); //Convert.ToInt32(HttpContext.Request.Cookies["userId"]);
                 utilisateur = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idUtilisateur);
             }
 
-          
+
             // récupération des informations renseignées dans le formulaire de recherche
             int nbPersonnes = searchFormVM.NbPersonnes;
             String ville = searchFormVM.Ville;

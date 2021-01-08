@@ -1,8 +1,12 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
+@using Microsoft.AspNetCore.Http
 @{
-    var isUtilisateurAuthentifieStr = HttpContextAccessor.HttpContext.Request.Cookies["userAuthentifie"];
-    var isUtilisateurAuthentifie = Convert.ToBoolean(isUtilisateurAuthentifieStr);
+    // accès cookies
+    //   var isUtilisateurAuthentifieStr = HttpContextAccessor.HttpContext.Request.Cookies["userAuthentifie"];
+    //   var isUtilisateurAuthentifie = Convert.ToBoolean(isUtilisateurAuthentifieStr);
+
+    // accès session
+    var isUtilisateurAuthentifie = Convert.ToBoolean(HttpContextAccessor.HttpContext.Session.GetInt32("userAuthentifie"));
 }
 
 <!DOCTYPE html>
@@ -13,6 +17,7 @@
     <title>@ViewData["Title"] - AirbnbAppli</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/messagerie.css" />
     <link href="~/css/availability-calendar.css" rel="stylesheet" type="text/css">
 </head>
 <body>

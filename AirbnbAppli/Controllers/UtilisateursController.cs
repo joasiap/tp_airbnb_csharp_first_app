@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AirbnbAppli.Models;
 using BC = BCrypt.Net.BCrypt;
-using System.Web;
 using Microsoft.AspNetCore.Http;
 using System;
 
@@ -98,12 +97,10 @@ namespace AirbnbAppli.Controllers
                 _db.Utilisateurs.Update(utilisateur);
                 _db.SaveChanges();
 
-                // création de cookies
-                CookieOptions cookieOptions = new CookieOptions();
-                cookieOptions.Expires = DateTime.Now.AddYears(1);
-                HttpContext.Response.Cookies.Append("userId", utilisateur.Id.ToString(), cookieOptions);
-                HttpContext.Response.Cookies.Append("userAuthentifie", utilisateur.Authentifie.ToString(), cookieOptions);
-                
+                // enregistrement des valeurs dans la session
+                HttpContext.Session.SetInt32("userId", utilisateur.Id);
+                HttpContext.Session.SetInt32("userAuthentifie", Convert.ToInt32(utilisateur.Authentifie));
+
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -112,6 +109,15 @@ namespace AirbnbAppli.Controllers
                 return View();
             }
         }
+
+        /*
+        // création de cookies
+        CookieOptions cookieOptions = new CookieOptions();
+        cookieOptions.Expires = DateTime.Now.AddYears(1);
+        HttpContext.Response.Cookies.Append("userId", utilisateur.Id.ToString(), cookieOptions);
+        HttpContext.Response.Cookies.Append("userAuthentifie", utilisateur.Authentifie.ToString(), cookieOptions);
+        */
+
 
         /**
          * Permet de savoir si l'utilisateur s'inscrit avec l'email et le mot de passe correct
@@ -131,23 +137,24 @@ namespace AirbnbAppli.Controllers
 
         public ActionResult Logout()
         {
-            // FormsAuthentication.SignOut();
-            // Session.Abandon(); // it will clear the session at the end of request
-            //HttpContext.SignOutAsync();
-
-
-            if (HttpContext.Request.Cookies.ContainsKey("userId")) {
+            if (HttpContext.Session.GetInt32("userId") != null && HttpContext.Session.GetInt32("userId") > 0) {
 
                 // récupérer l'utilisateur de la BDD
-                Utilisateur utilisateur = _db.Utilisateurs.Where(utilisateur => utilisateur.Id == Convert.ToInt32(Request.Cookies["userId"])).SingleOrDefault();
+                Utilisateur utilisateur = _db.Utilisateurs.Where(utilisateur => utilisateur.Id == HttpContext.Session.GetInt32("userId")).SingleOrDefault();
 
                 utilisateur.Authentifie = false;
                 _db.Utilisateurs.Add(utilisateur);
                 _db.Utilisateurs.Update(utilisateur);
                 _db.SaveChanges();
 
+                HttpContext.Session.Remove("userId");
+                HttpContext.Session.Remove("userAuthentifie");
+                HttpContext.Session.Clear();
+
+                /*
                 HttpContext.Response.Cookies.Delete("userId");
                 HttpContext.Response.Cookies.Delete("userAuthentifie");
+                */
             }
             
             return RedirectToAction("Index", "Home");

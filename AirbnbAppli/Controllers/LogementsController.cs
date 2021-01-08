@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AirbnbAppli.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirbnbAppli.Controllers
@@ -39,13 +40,13 @@ namespace AirbnbAppli.Controllers
             {
                 // récupération de l'utilisateur connecté
                 Utilisateur utilisateur = null;
-                if (HttpContext.Request.Cookies.ContainsKey("userId"))
+                if (HttpContext.Session.GetInt32("userId") != null && HttpContext.Session.GetInt32("userId") > 0)//HttpContext.Request.Cookies.ContainsKey("userId")
                 {
-                    int idUtilisateur = Convert.ToInt32(HttpContext.Request.Cookies["userId"]);
+                    int idUtilisateur = (int)HttpContext.Session.GetInt32("userId"); //Convert.ToInt32(HttpContext.Request.Cookies["userId"]);
                     utilisateur = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idUtilisateur);
                 }
 
-                if(utilisateur == null)
+                if (utilisateur == null)
                 {
                     TempData["messageErreur"] = "Connectez-vous pour pouvoir créer une annonce";
                     return RedirectToAction("Index", "Home");

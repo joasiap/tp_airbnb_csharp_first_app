@@ -16,8 +16,6 @@ namespace AirbnbAppli.Models
 
         public DbSet<Reservation> Reservations { get; set; }
 
-        public DbSet<Disponibilite> Disponibilites { get; set; }
-
         public DbSet<Message> Messages { get; set; }
     }
 }
