@@ -32,7 +32,7 @@
             @if (isUtilisateurAuthentifie && idUtilisateurAuthentifie != logement.Proprietaire.Id)
             {
                 <div class="mb-4">
-                    @Html.ActionLink("Message", "Index", "Messages", new { idProprietaire = @logement.Proprietaire.Id }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Messagerie", "Index", "Messages", new { idProprietaire = @logement.Proprietaire.Id }, new { @class = "btn btn-warning" })
                 </div>
             }
 

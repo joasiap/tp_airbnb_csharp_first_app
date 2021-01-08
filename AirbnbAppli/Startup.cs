@@ -29,6 +29,8 @@ namespace AirbnbAppli
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("mydb")));
             services.AddHttpContextAccessor();
 
+          //  services.AddAntiforgery(o => o.HeaderName = "CSRF-TOKEN");
+
             // configuration de la session
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession(options =>

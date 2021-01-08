@@ -48,11 +48,8 @@ namespace AirbnbAppli.Controllers
          * Récupère et retourne la liste de messages
          * en format JSON -> appel AJAX
          */
-        public JsonResult getMessages(int idProprietaire, int idUtilisateur) { 
-
-            int idProprietaire1 = Convert.ToInt32(idProprietaire);
-            int idUtilisateur1 = Convert.ToInt32(idUtilisateur);
-       
+        public JsonResult getMessages(int idProprietaire, int idUtilisateur)
+        {
             List<Message> messages = _db.Messages
                            .Where(message =>
                                    (message.Destinateur.Id == idProprietaire && message.Emetteur.Id == idUtilisateur) ||
@@ -61,8 +58,49 @@ namespace AirbnbAppli.Controllers
                            .Include(message => message.Destinateur)
                            .ToList();
 
-            //ViewData["messages"] = Newtonsoft.Json.JsonConvert.SerializeObject(messages);
             return Json(Newtonsoft.Json.JsonConvert.SerializeObject(messages));
+        }
+
+
+
+
+        /**
+         * Création d'un message
+         * -> appel AJAX
+         */
+        // POST: ReservationsController/Create
+        [HttpPost]
+       // [ValidateAntiForgeryToken]
+        public ActionResult Create(string idProprietaire, string idUtilisateur, string contenu)
+        {
+            try
+            {
+                int idProprietaire1 = Convert.ToInt32(idProprietaire);
+                int idUtilisateur1 = Convert.ToInt32(idUtilisateur);
+
+                Utilisateur proprietaire = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idProprietaire1);
+                Utilisateur utilisateurAuthentifie = _db.Utilisateurs.Single(utilisateur => utilisateur.Id == idUtilisateur1);
+
+                Message message = new Message
+                {
+                    Date = DateTime.Now,
+                    Contenu = contenu,
+                    Destinateur = proprietaire,
+                    Emetteur = utilisateurAuthentifie
+                };
+
+                _db.Messages.Add(message);
+                _db.SaveChanges();
+
+                //  Send "success"
+                 return Json(new { success = true });
+            }
+            catch
+            {
+                //  Send "erreur"
+                return Json(new { success = false });
+            }
+
         }
     }
 }
