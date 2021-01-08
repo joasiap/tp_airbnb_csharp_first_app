@@ -59,6 +59,7 @@ namespace AirbnbAppli.Controllers
                                    (message.Destinateur.Id == idUtilisateur && message.Emetteur.Id == idProprietaire)
                                   )
                            .Include(message => message.Destinateur)
+                           .Include(message => message.Emetteur)
                            .ToList();
 
             return Json(Newtonsoft.Json.JsonConvert.SerializeObject(messages));
