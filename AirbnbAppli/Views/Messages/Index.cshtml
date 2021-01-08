@@ -14,7 +14,7 @@
 <div class="container-fluid">
     <div class="chat_window">
         <div class="top_menu">
-            <div class="title">Chat</div>
+            <div class="title">Messagerie</div>
         </div>
         <ul class="messages"></ul>
         <div class="bottom_wrapper clearfix">
@@ -43,11 +43,9 @@
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script>
     (function () {
-
         let utilisateurAuthentifie = $('#utilisateur').val();
         let idProprietaire = $('#idProprietaire').val();
         let $jsErrors = $('#js-errors');
-
         var Message;
         Message = function (arg) {
             this.text = arg.text, this.message_side = arg.message_side;
@@ -67,13 +65,14 @@
         $(function () {
             var getMessageText, message_side, sendMessage;
             message_side = 'right';
+            // récupère le message dans input
             getMessageText = function () {
                 var $message_input;
                 $message_input = $('.message_input');
                 return $message_input.val();
             };
 
-
+            // envoi du message dans la messagerie -> effet visuel uniquement
             sendMessage = function (text, message_side) {
                 var $messages, message;
                 if (text.trim() === '') {
@@ -90,10 +89,10 @@
                 return $messages.animate({ scrollTop: $messages.prop('scrollHeight') }, 300);
             };
 
+            // permet d'enregistrer le message dans la BDD 
+            posterMessage = function () {
 
-            // envoi de messages sur le clic
-            $('.send_message').click(function (e) {
-               // var token = document.querySelector('input[name="__RequestVerificationToken"]').getAttribute("value");
+                  // var token = document.querySelector('input[name="__RequestVerificationToken"]').getAttribute("value");
                 /*
                  *  headers: {
                         "RequestVerificationToken": token
@@ -108,7 +107,6 @@
                     dataType: 'json',
                     contentType: "application/json; charset=utf-8",
                     processData: false,
-
                     error: function (response) {
                         viderErreurs($jsErrors);
                         afficherErreurs("Echec lors de l'envoi de message", $jsErrors);
@@ -123,19 +121,23 @@
                         }
                 },
 
-              
                 });
             // fin appel AJAX
+
+            }
+
+            // envoi de messages suite au clic
+            $('.send_message').click(function (e) {
+                posterMessage();
             });
-
-
-
-
+            // envoi de message si on presse Enter
             $('.message_input').keyup(function (e) {
                 if (e.which === 13) {
-                    return sendMessage(getMessageText(), message_side);
+                    posterMessage();
                 }
             });
+
+
 
 
             // AJAX -> récupérer les messages
@@ -144,13 +146,10 @@
                 url: '@Url.Action("GetMessages", "Messages")',
                 data: "idProprietaire=" + idProprietaire + "&idUtilisateur=" + utilisateurAuthentifie,
                 processData: false,
-
                 success: function (response, status, xhr) {
                     // la réponse est un STRING avec des données JSON donc il faut la parser pour obtenir un objet JSON en JS
                     let messagesjsonArray = JSON.parse(response);
-
                     $.each(messagesjsonArray, function (i, val) {
-
                         // messages utilisateur d'un côté
                         if (utilisateurAuthentifie == val.Emetteur.Id) {
                             message_side = 'right';
@@ -158,41 +157,38 @@
                         else {
                             message_side = 'left';
                         }
-
                         sendMessage(val.Contenu, message_side);
-
                     });
-
                 },
             });
-            // fin appel AJAX
+            // fin appel AJAX récupération de messages
         });
+
+
 
         // fonction qui affiche les erreurs js/jquery dans le div #js-errors
         function afficherErreurs(message, jsErrors) {
             //on vide le div des erreurs précédentes s'il y en avait pour afficher de nouvelles
-            $jsErrors.empty();
-            if (jsErrors.hasClass("alert alert-danger mx-auto")) { // si on laisse la classe tout le temps, il y aura un encadré rouge vide sur la page
+            jsErrors.empty();
+            // si on laisse la classe tout le temps, il y aura un encadré rouge vide sur la page
+            if (jsErrors.hasClass("alert alert-danger mx-auto")) {
                 jsErrors.removeClass("alert alert-danger mx-auto");
                 jsErrors.fadeOut(300); // effet de disparition
             }
             jsErrors.addClass("alert alert-danger mx-auto");
             jsErrors.append(message);
             jsErrors.fadeIn(300); // effet d'apparition
-
             return setTimeout(function () {
                 return viderErreurs(jsErrors);
             }, 2000);
         }
-
         // fonction qui vide le div #js-errors de toutes les erreurs qu'il contient
-        function viderErreurs($jsErrors) {
-            $jsErrors.empty();
-            if ($jsErrors.hasClass("alert alert-danger mx-auto")) {
-                $jsErrors.removeClass("alert alert-danger mx-auto");
+        function viderErreurs(jsErrors) {
+            jsErrors.empty();
+            if (jsErrors.hasClass("alert alert-danger mx-auto")) {
+                jsErrors.removeClass("alert alert-danger mx-auto");
                // jsErrors.fadeOut(500);
             }
         }
-
     }.call(this));
 </script>
